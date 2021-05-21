@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="49206bdd-aa9f-4560-9451-7e316cfe5883" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="8ed4b2a7-9cc1-44ed-9d54-ce129009b920" >
+		<file:connection />
+	</file:config>
+	<flow name="mule-file-opFlow" doc:id="33d18565-f793-4980-81c2-c4b4c9aaabfb" >
+		<http:listener doc:name="Listener" doc:id="9ba029cf-89e3-438c-aa31-cabb03163f47" config-ref="HTTP_Listener_config" path="/transform"/>
+		<set-variable value="${app.home} ++ #[attributes.queryParams.inputFile]" doc:name="Set Variable" doc:id="185dcd8e-379a-4476-b16d-ef22269a1b31" variableName="inputFile"/>
+		<flow-ref doc:name="Flow Reference_readFile" doc:id="4f294132-dca1-4ce6-99d9-9dc50d33cc38" name="read-op" />
+		<logger level="INFO" doc:name="Logger" doc:id="38c588ca-e753-4d9c-90ef-4bfa141326ed" message="#[payload]"/>
+		<choice doc:name="Choice" doc:id="ab5f0620-0464-4c2f-af7e-f07123b07de2" >
+			<when expression='#[vars.inputFile contains ".xml"]'>
+				<flow-ref doc:name="xmlTojson" doc:id="ecd9e00b-4153-4c57-83f3-3876d694e11f" name="xmlTojson" />
+				<set-variable value='#[vars.inputFile replace ".xml" with ".json"]' doc:name="writeVar" doc:id="9b91d74e-2c96-4584-869b-5e9be8271f7f" variableName="outputFile" />
+			</when>
+			<otherwise >
+				<choice doc:name="Choice" doc:id="79147a52-9862-4647-9ca0-863a68a6e2f8">
+					<when expression='#[vars.inputFile contains ".json"]'>
+						<flow-ref doc:name="jsonToxml" doc:id="3bff4ca0-d965-4b6c-987f-33eeaca8ec74" name="jsonToXml" />
+						<set-variable value='#[vars.inputFile replace ".json" with ".xml"]' doc:name="Set Output Var" doc:id="0fc98497-37af-438c-afa0-eaa93c26b77e" variableName="outputFile"/>
+					</when>
+					<otherwise>
+						<logger level="INFO" doc:name="Logger" doc:id="d2d19b17-7c86-48e7-97e0-46c310469ade" />
+					</otherwise>
+				</choice>
+			</otherwise>
+		</choice>
+		<flow-ref doc:name="Flow Reference_writeFile" doc:id="a6914a0e-fbc6-4797-b35b-0753b922ab05" name="file-write" />
+	</flow>
+</mule>

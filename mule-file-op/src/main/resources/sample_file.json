@@ -1,0 +1,20 @@
+{
+    "Profiles" : [
+                    {
+                        "name":"John",
+                        "LastName" : "Doe",
+                        "Age" : 30,
+                        "Country":"India",
+                        "Profession" : "Salesofrce Architect",
+                        "Skills":"Salesforce, HTML"
+                    },
+                    {
+                        "name":"Jenny",
+                        "LastName" : "Doe",
+                        "Age" : 40,
+                        "Country":"USA",
+                        "Profession" : "Mulesoft Architect",
+                        "Skills":"HTML, Mulesoft"
+                    }
+                ]
+    }

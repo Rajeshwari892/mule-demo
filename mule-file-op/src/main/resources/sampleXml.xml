@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+    <Profiles>
+        <name>John</name>
+        <LastName>Doe</LastName>
+        <Age>30</Age>
+        <Country>India</Country>
+        <Profession>Salesofrce Architect</Profession>
+        <Skills>Salesforce, HTML</Skills>
+    </Profiles>
+    <Profiles>
+        <name>Jenny</name>
+        <LastName>Doe</LastName>
+        <Age>40</Age>
+        <Country>USA</Country>
+        <Profession>Mulesoft Architect</Profession>
+        <Skills>HTML, Mulesoft</Skills>
+    </Profiles>
+</root>
